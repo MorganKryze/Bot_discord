@@ -1,6 +1,11 @@
 import discord
 from discord.ext import commands
 import youtube_dl
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+TOKEN= os.getenv("MOGPDB_TOKEN")
 
 intents = discord.Intents.default()
 intents.members = True
@@ -13,7 +18,7 @@ async def on_ready():
     print("--- Ready ---")
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Netflix"))
     channel = bot.get_channel(963007190308892702)
-    await channel.send("< ON >",delete_after=10)
+    await channel.send("< ON >",delete_after=15)
 
 # Clear command
 @bot.command(aliases= ['clear','clr']) 
@@ -38,5 +43,4 @@ async def InfoServeur(ctx):
 
 
 
-
-bot.run("OTYzMzg1MTY3MjgyNTg5NzA3.Ga0jN6.52hrLKOjxugiPaB8uXingIfByWYAl2pylzb8ro")
+bot.run(TOKEN)
