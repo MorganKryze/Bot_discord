@@ -1,24 +1,39 @@
+
 import discord
 from discord.ext import commands
+from discord import app_commands
 import youtube_dl
 import os
 from dotenv import load_dotenv
 
+import Audio
+
+
 load_dotenv()
-TOKEN= os.getenv("MOGPDB_TOKEN")
+TOKEN= os.getenv("DISCORD_KEY")
 
 intents = discord.Intents.default()
 intents.members = True
-bot = commands.Bot(command_prefix ="/", description = "On découvre python c nice",intents=intents)
+intents.message_content = True
+
+bot = commands.Bot(command_prefix ="/",description = "test", intents=intents)
 ytdl = youtube_dl.YoutubeDL()
+
+bot.load_extension ("Audio")
 
 # Start of the bot
 @bot.event
 async def on_ready():
-    print("--- Ready ---")
+    print("Bot is Ready")
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Netflix"))
     channel = bot.get_channel(963007190308892702)
-    await channel.send("< ON >",delete_after=15)
+    await channel.send("< ON >",delete_after=20)
+
+@bot.event
+async def setup_hook():
+    cogs=[Audio]
+    for i in cogs:
+        await i.setup(bot)
 
 # Clear command
 @bot.command(aliases= ['clear','clr']) 
@@ -30,9 +45,9 @@ async def Clear(ctx,amount: int = None):
        await ctx.channel.purge(limit=amount+1)
 
 # Greetings command
-@bot.command
+@bot.command()
 async def Hi(ctx):
-    await ctx.send(f"Hello there {ctx.author.mention} !", )
+    await ctx.send(f"Hello there {ctx.author.mention} !")
 
 # InfoServer command
 @bot.command(aliases= ['Info'])
